@@ -9,7 +9,7 @@ const app = express();
 
 //
 app.listen(process.env.port, () => {
-    console.log("listening to port"+process.env.port);
+    console.log("listening to port "+process.env.port);
 }); 
 
 const userSchema = require('./index').userSchema
@@ -18,7 +18,7 @@ app.use('/graphql', bodyParser.json(), graphqlHTTP ( request => ({
     graphiql : true,
     context:{token:request.headers.authorization},
 })));
-
+            
 
 
 mongoose.Promise = global.Promise;
@@ -30,3 +30,5 @@ mongoose.connect(dbConfig.url, {
     console.log('Could not connect to the database. Exiting now...', err);
     process.exit();
 });
+
+module.exports = app;

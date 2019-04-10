@@ -5,6 +5,8 @@ const { GraphQLString,  //declaring the graphQL types
 const auth = require('../types/types').auth
 const userModel = require('../model/userModel');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const sendMail = require('../util').sendEmailFunction
 
 exports.registration = {
     type: auth,
@@ -23,8 +25,8 @@ exports.registration = {
         }
 
     },
-    resolve(parent, args) {
-
+    async resolve(parent, args) {
+        
         let encryptedPassword = bcrypt.hashSync(args.password, 10);
 
         var email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
@@ -34,17 +36,23 @@ exports.registration = {
         if (args.password.length < 8) {
             return { "message": "password should be min 8 characters" }
         }
-        user = userModel.find({ 'email': args.email })
-        if (user.length < 0) {
+        user = await userModel.find({ 'email': args.email })
+        //console.log(user);
+        if (!user.length > 0) {
 
             let user = new userModel({
                 firstName: args.firstName,
                 lastName: args.lastName,
                 email: args.email,
-                password: encryptedPassword
+                password: encryptedPassword,
+                verification:false
             });
 
             user.save();
+            var token =await jwt.sign({"email": args.email},"APP_SECRET");
+            var url = "http://localhost:3000/graphql/"+token;
+            sendMail(url,args.email);
+
             return {
                 "success": true,
                 "message": "registration successful"

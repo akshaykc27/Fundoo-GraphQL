@@ -20,6 +20,11 @@ var userSchema = new schema({
     password: {
         type: 'string',
         required: true
+    },
+
+    verification : {
+        type : 'boolean',
+        timestamps : true
     }
 });
 

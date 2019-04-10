@@ -6,17 +6,19 @@ require('dotenv').config();
 function to send the email  
 */
 exports.sendEmailFunction = (url,email) => {
+    console.log(process.env.USERNAME,process.env.PASSWORD)
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: process.env.USERNAME,
+            user: process.env.EMAIL,
             pass: process.env.PASSWORD
+
         },
     });
     const mailOptions = {
-        from: process.env.USERNAME,
+        from: "FUNDOO HELP",
         to: email,
-        subject: 'Chat-app password reset link ',
+        subject: 'Fundoo password reset link ',
         text: 'Click on the link provided to reset your password:\n\n' + url
     };
     transporter.sendMail(mailOptions, (err, info) => {

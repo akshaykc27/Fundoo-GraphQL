@@ -31,17 +31,24 @@ exports.login = {
         {
             return {"message" : "Password should contain minimum 8 characters"}
         }
-
+        
         user =  await userModel.find({'email' : args.email})
         if(user.length>0)
         {
+            console.log(user[0].verification);
+            if(user[0].verification === false)
+            {
+                return {
+                    "message" : "Email not verified"
+                }
+            }
             let valid = bcrypt.compare(args.password, user.password);
             if(valid)
             {
                 let token = await jwt.sign({'email': args.email},'secret',{ expiresIn : '1d'})
                 console.log(token)
                 return {
-                    "message" : token,
+                    "message" : "login successfull",
                     "success" : true
                 }
             }

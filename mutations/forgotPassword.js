@@ -22,7 +22,7 @@ async resolve(parent, args){
     if(user.length>0)
     {
         token = jwt.sign({email : args.email},"APP_SECRET")
-        url = "http://localhost:4000/resetPassword/"+token;
+        url = "http://localhost:4000/graphql/"+token;
         sendMail(url,args.email)
         return{
             "message" : token
