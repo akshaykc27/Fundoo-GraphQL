@@ -5,6 +5,8 @@ const graphqlHTTP = require('express-graphql');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
 const dbConfig = require('./config/configURL');
+const redis = require('redis');
+var client =  redis.createClient();
 require('dotenv').config();
 
 const app = express();
@@ -21,7 +23,15 @@ app.use('/graphql', bodyParser.json(), graphqlHTTP ( request => ({
     graphiql : true,
     context:{token:request.headers.authorization},
 })));
-            
+
+//to check redis cache connection
+client.on('connect', function() {
+    console.log('Redis client connected');
+});
+
+client.on('error', function (err) {
+    console.log('Something went wrong ' + err);
+});
 
 // to configure mongo db
 mongoose.Promise = global.Promise;

@@ -9,6 +9,8 @@ const userModel = require('../model/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const sendMail = require('../util').sendEmailFunction
+const redis = require('redis')
+var client =  redis.createClient()
 
 
 // mutation for registering a user
@@ -53,9 +55,19 @@ exports.registration = {
             });
 
             user.save();
-            var token =await jwt.sign({"email": args.email},"APP_SECRET"); //generating the token and sending it to the email provided
-                                                                           //to check the authenticity of the user 
-            var url = "http://localhost:3000/graphql/"+token;
+            /*
+            generating the token and sending it to the email provided to check the authenticity of the user
+            */
+            var token =await jwt.sign({"email": args.email},"APP_SECRET"); 
+            client.set("registerToken",token); // saving the token in redis cache
+            client.get("registerToken", function (error, result) {
+                if (error) {
+                    console.log(error);
+                    throw error;
+                }
+                console.log('Register token->' + result);
+            });
+            var url = "http://localhost:3000/graphql/"+token;              
             sendMail(url,args.email);
 
             return {

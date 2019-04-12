@@ -6,7 +6,6 @@ require('dotenv').config();
 function to send the email  
 */
 exports.sendEmailFunction = (url,email) => {
-    console.log(process.env.USERNAME,process.env.PASSWORD)
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {

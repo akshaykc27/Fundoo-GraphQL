@@ -25,6 +25,8 @@
     "mocha": "^6.1.2",
     "mongoose": "^5.4.15",
     "nodemailer": "^6.0.0",
+    "redis": "^2.8.0",
+    "redis-server": "^1.2.2",
     "supertest": "^4.0.2"
   }
 }
