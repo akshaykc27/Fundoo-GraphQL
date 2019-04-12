@@ -1,4 +1,4 @@
-//requiring all the neccessary dependencies
+//requiring all the neccessary files
 const graphql = require('graphql');
 const { GraphQLObjectType,    //declaring the graphQL typed 
     GraphQLString,
@@ -6,7 +6,7 @@ const { GraphQLObjectType,    //declaring the graphQL typed
     GraphQLBoolean
 } = graphql;
 
-exports.userType = new GraphQLObjectType({       //defining the schema 
+exports.userType = new GraphQLObjectType({       //defining the schema or type 
     name: 'user',
     fields: () => ({
         //return {
@@ -26,7 +26,7 @@ exports.userType = new GraphQLObjectType({       //defining the schema
     })
 });
 
-exports.auth = new GraphQLObjectType({
+exports.auth = new GraphQLObjectType({          //defining the schema or type 
     name: 'auth',
     fields : () => ({
         success : {

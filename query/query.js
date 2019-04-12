@@ -14,7 +14,7 @@ exports.userQueryType = new GraphQLObjectType({
             userDetails: {
                 type: new GraphQLList(userType),
                 resolve: () => {
-                    const users = userModel.find().exec()
+                    const users = userModel.find().exec()   //  returns all the users from the database
                     if (!users) {
                         throw new Error('ERROR : in query');
                     }

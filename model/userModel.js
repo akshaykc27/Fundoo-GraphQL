@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 var schema = mongoose.Schema;
-var userSchema = new schema({
+var userSchema = new schema({  // defining the mongodb schema
 
     firstName: {
         type: 'string',
@@ -24,8 +24,11 @@ var userSchema = new schema({
 
     verification : {
         type : 'boolean',
-        timestamps : true
-    }
-});
+        
+    },
+},
+    {
+        timestamps:true
+    });
 
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('user', userSchema); // exporting the model

@@ -1,3 +1,5 @@
+// requiring the necessary files
+
 const graphql = require('graphql');
 const { GraphQLString,  //declaring the graphQL types
     GraphQLNonNull } = graphql;
@@ -8,6 +10,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const sendMail = require('../util').sendEmailFunction
 
+
+// mutation for registering a user
 exports.registration = {
     type: auth,
     args: {
@@ -27,20 +31,20 @@ exports.registration = {
     },
     async resolve(parent, args) {
         
-        let encryptedPassword = bcrypt.hashSync(args.password, 10);
+        let encryptedPassword = bcrypt.hashSync(args.password, 10); // encrypting the password
 
-        var email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        var email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ //regEX for validating email
         if (!(email.test(args.email))) {
             return { "message": "Email ID is not valid" }
         }
-        if (args.password.length < 8) {
+        if (args.password.length < 8) {  // validating the password
             return { "message": "password should be min 8 characters" }
         }
-        user = await userModel.find({ 'email': args.email })
+        user = await userModel.find({ 'email': args.email })  //checking the database for existing user with the same email 
         //console.log(user);
         if (!user.length > 0) {
-
-            let user = new userModel({
+ 
+            let user = new userModel({    // creating an object and saving the details of the user in the database
                 firstName: args.firstName,
                 lastName: args.lastName,
                 email: args.email,
@@ -49,7 +53,8 @@ exports.registration = {
             });
 
             user.save();
-            var token =await jwt.sign({"email": args.email},"APP_SECRET");
+            var token =await jwt.sign({"email": args.email},"APP_SECRET"); //generating the token and sending it to the email provided
+                                                                           //to check the authenticity of the user 
             var url = "http://localhost:3000/graphql/"+token;
             sendMail(url,args.email);
 
