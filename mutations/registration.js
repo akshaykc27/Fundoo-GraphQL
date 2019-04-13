@@ -63,16 +63,17 @@ exports.registration = {
             client.get("registerToken", function (error, result) {
                 if (error) {
                     console.log(error);
-                    throw error;
+                   
                 }
-                console.log('Register token->' + result);
+                console.log('Register token-> ' + result);
             });
             var url = "http://localhost:3000/graphql/"+token;              
             sendMail(url,args.email);
 
             return {
                 "success": true,
-                "message": "registration successful"
+                "message": "registration successful",
+                "token" : token
             }
         }
         else {

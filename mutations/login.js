@@ -50,7 +50,7 @@ exports.login = {
             let valid = bcrypt.compare(args.password, user.password); //encrypting the password
             if(valid)
             {
-                let token = await jwt.sign({'email': args.email},'secret',{ expiresIn : '1d'}) //token generation
+                let token = await jwt.sign({'email': args.email, "userID": user[0].id },'secret',{ expiresIn : '1d'}) //token generation
                 return {
                     "message" : token,
                     "success" : true

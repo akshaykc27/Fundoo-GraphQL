@@ -35,6 +35,10 @@ exports.auth = new GraphQLObjectType({          //defining the schema or type
 
         message: {
             type : GraphQLString
+        },
+
+        token : {
+            type : GraphQLString
         }
 
     })
