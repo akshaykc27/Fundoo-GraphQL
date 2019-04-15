@@ -21,10 +21,10 @@ exports.forgotPassword = {
 async resolve(parent, args){
     user = await userModel.find({'email':args.email});  //checking if the email already exists in the database 
     console.log(user)
-    if(user.length>0)
+    if(user)
     {
         token = jwt.sign({email : args.email},"APP_SECRET")   //generates the token and sends to the email provided for the further process 
-        url = "http://localhost:3000/graphql/"+token;
+        url = "http://localhost:3000/graphql?token="+token;
         sendMail(url,args.email)
         return{
             "message" : "A link to reset your password has been sent to your email",

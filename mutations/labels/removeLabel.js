@@ -16,15 +16,15 @@ const jwt = require('jsonwebtoken');
 exports.removeLabel = {
     type: auth,
     args: {
-        labelName: {
+        labelID: {
             type: new GraphQLNonNull(GraphQLString)
         }
     },
     async resolve(parent, args, context) {
 
         var payload = await jwt.verify(context.token, "secret");
-        console.log(payload.userID)
-        user = labelModel.findByIdAndRemove({ "userID": payload.userID });
+       // console.log(payload.userID)
+        user = labelModel.findByIdAndRemove({ "_id": args.labelID});
         if (!user) {
             return {
                 "message": "enter a valid label name"

@@ -16,7 +16,7 @@ const jwt = require('jsonwebtoken');
 exports.updateLabel = {
     type: auth,
     args: {
-        labelName: {
+        labelID: {
             type: new GraphQLNonNull(GraphQLString)
         },
 
@@ -29,7 +29,7 @@ exports.updateLabel = {
 
         var payload = await jwt.verify(context.token, "secret");
         console.log(payload.userID)
-        var label = await labelModel.findOneAndUpdate({ "userID": payload.userID  },{$set:{labelName: args.newLabelName}})
+        var label = await labelModel.findOneAndUpdate({ "userID": payload.userID, "_id" : args.labelID  },{$set:{labelName: args.newLabelName}})
        console.log(label)
         if(label)
         {

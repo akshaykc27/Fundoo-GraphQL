@@ -1,9 +1,14 @@
 const graphql = require('graphql');
 const { GraphQLObjectType,    //declaring the graphQL types
-    GraphQLList } = graphql;
+    GraphQLList,
+    GraphqlNonNull,
+    GraphQLString } = graphql;
 
 const userType = require('../types/types').userType;
+const labelType = require('../types/types').labelType;
 const userModel = require('../model/userModel');
+const labelModel = require('../model/labelModel');
+const jwt = require('jsonwebtoken')
 
 //defining the Query
 
@@ -19,6 +24,24 @@ exports.userQueryType = new GraphQLObjectType({
                         throw new Error('ERROR : in query');
                     }
                     return users;
+                }
+            },
+
+            labels: {
+                type: new GraphQLList(labelType),
+                args: {
+                    userID: {
+                        type: GraphQLString
+                    }
+                },
+                resolve: (parent, args) => {
+                    const labels = labelModel.find({ "userID": args.userID })
+                    if (!labels) {
+                        throw new Error('ERROR : in query');
+                    }
+
+                    return labels;
+
                 }
             }
         }

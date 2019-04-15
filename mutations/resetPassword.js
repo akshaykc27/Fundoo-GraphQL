@@ -7,6 +7,7 @@ const { GraphQLString,  //declaring the graphQL types
 const userModel = require('../model/userModel');
 const jwt = require('jsonwebtoken');
 const auth = require('../types/types').auth
+const bcrypt = require('bcryptjs')
 
 // mutation for reset password
 exports.resetPassword = {
@@ -28,8 +29,9 @@ exports.resetPassword = {
             }
         }
         else {
+            var encryptedPassword = bcrypt.hashSync(args.password,10)
             var payload = await jwt.verify(context.token, "APP_SECRET");  // token verification
-            userUpdate = await userModel.updateOne({ "email": payload.email }, { $set: { "password": args.password } })  // finding the user for the email provided and updating the password in the database  
+            userUpdate = await userModel.updateOne({ "email": payload.email }, { $set: { "password": encryptedPassword } })  // finding the user for the email provided and updating the password in the database  
             if (userUpdate) {
                 return {
                     "message": "password reset successful"

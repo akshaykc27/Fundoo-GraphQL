@@ -10,35 +10,46 @@ exports.userType = new GraphQLObjectType({       //defining the schema or type
     name: 'user',
     fields: () => ({
         //return {
-            firstName: {
-                type: new GraphQLNonNull(GraphQLString)
-            },
-            lastName: {
-                type: new GraphQLNonNull(GraphQLString)
-            },
-            email: {
-                type: new GraphQLNonNull(GraphQLString)
-            },
-            password: {
-                type: new GraphQLNonNull(GraphQLString)
-            }
+        firstName: {
+            type: new GraphQLNonNull(GraphQLString)
+        },
+        lastName: {
+            type: new GraphQLNonNull(GraphQLString)
+        },
+        email: {
+            type: new GraphQLNonNull(GraphQLString)
+        },
+        password: {
+            type: new GraphQLNonNull(GraphQLString)
+        }
         //}
     })
 });
 
 exports.auth = new GraphQLObjectType({          //defining the schema or type 
     name: 'auth',
-    fields : () => ({
-        success : {
-            type : GraphQLBoolean
+    fields: () => ({
+        success: {
+            type: GraphQLBoolean
         },
 
         message: {
-            type : GraphQLString
+            type: GraphQLString
         },
 
-        token : {
-            type : GraphQLString
+        token: {
+            type: GraphQLString
+        }
+
+    })
+});
+
+exports.labelType = new GraphQLObjectType({       //defining the schema or type 
+    name: 'labels',
+    fields: () => ({
+
+        labelName: {
+            type: new GraphQLNonNull(GraphQLString)
         }
 
     })
