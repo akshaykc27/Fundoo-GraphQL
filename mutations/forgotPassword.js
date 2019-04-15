@@ -1,15 +1,24 @@
-const graphql = require('graphql')
-const { GraphQLString,  //declaring the graphQL types
-    GraphQLNonNull } = graphql;
+/*
+     requiring the necessary files
+*/
 
-
-// requiring the necessary files
+const graphql = require('graphql');
 const userModel = require('../model/userModel');
 const jwt = require('jsonwebtoken');
 const sendMail = require('../util').sendEmailFunction
 const auth = require('../types/types').auth
 
-//mutation for forgot password
+/* 
+    declaring the graphQL types
+*/
+
+const { GraphQLString,
+    GraphQLNonNull } = graphql;
+
+/*
+    mutation for forgot password
+*/
+
 exports.forgotPassword = {
     type: auth,
     args: {
@@ -17,22 +26,35 @@ exports.forgotPassword = {
             type: new GraphQLNonNull(GraphQLString)
         }
     },
+    /**
+     * 
+     * @param {*} parent 
+     * @param {*} args 
+     */
+    async resolve(parent, args) {
 
-async resolve(parent, args){
-    user = await userModel.find({'email':args.email});  //checking if the email already exists in the database 
-    console.log(user)
-    if(user)
-    {
-        token = jwt.sign({email : args.email},"APP_SECRET")   //generates the token and sends to the email provided for the further process 
-        url = "http://localhost:3000/graphql?token="+token;
-        sendMail(url,args.email)
-        return{
-            "message" : "A link to reset your password has been sent to your email",
-            "token": token 
+        try {
+            user = await userModel.find({ 'email': args.email });  //checking if the email already exists in the database 
+            console.log(user)
+            if (user) {
+                token = jwt.sign({ email: args.email }, "APP_SECRET")   //generates the token and sends to the email provided for the further process 
+                url = "http://localhost:3000/graphql?token=" + token;
+                sendMail(url, args.email)
+                return {
+                    "message": "A link to reset your password has been sent to your email",
+                    "token": token
+                }
+            }
+            return {
+                "message": "Invalid user"
+            }
+        }
+        catch (err) {
+            console.log("ERROR: " + err);
+            return {
+                "message": err
+            }
+
         }
     }
-    return{
-        "message" : "Invalid user"
-    }
-}
 }
