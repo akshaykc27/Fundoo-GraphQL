@@ -61,7 +61,8 @@ exports.login = {
             let valid = bcrypt.compare(args.password, user.password); //encrypting the password
             if (valid) {
                 let token = await jwt.sign({ 'email': args.email, "userID": user[0].id, "password": user[0].password }, 'secret', { expiresIn: '1d' }) //token generation
-                client.set("loginToken", token)
+                client.set("loginToken"+args.email, token) 
+                
                 return {
                     "message": token,
                     "success": true

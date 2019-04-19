@@ -50,7 +50,7 @@ exports.registration = {
     async resolve(parent, args) {
 
         try {
-            let encryptedPassword = bcrypt.hashSync(args.password, 10); // encrypting the password
+
 
             var email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ //regEX for validating email
             if (!(email.test(args.email))) {
@@ -59,6 +59,9 @@ exports.registration = {
             if (args.password.length < 8) {  // validating the password
                 return { "message": "password should be min 8 characters" }
             }
+
+            let encryptedPassword = bcrypt.hashSync(args.password, 10); // encrypting the password
+
             user = await userModel.find({ 'email': args.email })  //checking the database for existing user with the same email 
             //console.log(user);
             if (!user.length > 0) {
@@ -76,15 +79,15 @@ exports.registration = {
                 generating the token and sending it to the email provided to check the authenticity of the user
                 */
                 var token = await jwt.sign({ "email": args.email }, "APP_SECRET");
-                client.set("registerToken", token); // saving the token in redis cache
-                client.get("registerToken", function (error, result) {
+                client.set("registerToken"+args.id, token); // saving the token in redis cache
+                client.get("registerToken"+args.id, function (error, result) {
                     if (error) {
                         console.log(error);
 
                     }
                     console.log('Register token-> ' + result);
                 });
-                var url = "http://localhost:3000/graphql/" + token;
+                var url = "http://localhost:3000/graphql?token=" + token;
                 sendMail(url, args.email);
 
                 return {

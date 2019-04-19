@@ -8,8 +8,5 @@ var mutation = require('./mutations/index');
 
 exports.userSchema = new GraphQLSchema({   // defining the user schema
     query: userQueryType,
-    mutation: new GraphQLObjectType({
-        name: 'Mutation',
-        fields: mutation
-    })
+    mutation: mutation
 })

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 var schema = mongoose.Schema;
-var userSchema = new schema({  // defining the mongodb schema
+var labelSchema = new schema({  // defining the mongodb schema
 
     labelName: {
         type: 'string',
@@ -17,4 +17,4 @@ var userSchema = new schema({  // defining the mongodb schema
         timestamps:true
     });
 
-module.exports = mongoose.model('labels', userSchema); // exporting the model
+module.exports = mongoose.model('labels', labelSchema); // exporting the model

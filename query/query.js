@@ -1,14 +1,12 @@
 const graphql = require('graphql');
 const { GraphQLObjectType,    //declaring the graphQL types
     GraphQLList,
-    GraphqlNonNull,
     GraphQLString } = graphql;
 
 const userType = require('../types/types').userType;
 const labelType = require('../types/types').labelType;
 const userModel = require('../model/userModel');
 const labelModel = require('../model/labelModel');
-const jwt = require('jsonwebtoken')
 
 //defining the Query
 

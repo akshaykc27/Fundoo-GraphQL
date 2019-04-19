@@ -38,23 +38,32 @@ exports.removeLabel = {
 
     async resolve(parent, args, context) {
 
-        var payload = await jwt.verify(context.token, "secret");
-        // console.log(payload.userID)
-        user = labelModel.findByIdAndRemove({ "_id": args.labelID });
-        if (!user) {
-            return {
-                "message": "enter a valid label name"
+        try {
+            var payload = await jwt.verify(context.token, "secret");
+            // console.log(payload.userID)
+            user = labelModel.findByIdAndRemove({ "_id": args.labelID });
+            if (!user) {
+                return {
+                    "message": "enter a valid label name"
+                }
+            }
+            else {
+                return {
+                    "message": "label removed successfully"
+                }
             }
         }
-        else {
+
+        catch (err) {
+            console.log("ERROR: " + err);
             return {
-                "message": "label removed successfully"
+                "message": err
             }
+
         }
+
+
     }
-
-
 }
-
 
 
