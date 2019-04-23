@@ -15,7 +15,7 @@ const { GraphQLString,
     GraphQLNonNull } = graphql;
 
 /* 
-    mutation for a creatinf labels
+    mutation for a creating labels
 */
 
 exports.createLabel = {

@@ -4,28 +4,38 @@ var userSchema = new schema({  // defining the mongodb schema
 
     firstName: {
         type: 'string',
-        required: true
+        //required: true
     },
 
     lastName: {
         type: 'string',
-        required: true
+        //required: true
     },
 
     email: {
         type: 'string',
-        required: true
+        //required: true
     },
 
     password: {
         type: 'string',
-        required: true
+        //required: true
     },
 
     verification : {
-        type : 'boolean',
+        //type : 'boolean',
         
     },
+    gitVerify : {
+        type:'boolean',
+        default:false
+    },
+    gitID : {
+        type:String
+    },
+    gitUsername : {
+        type : String
+    }
 },
     {
         timestamps:true

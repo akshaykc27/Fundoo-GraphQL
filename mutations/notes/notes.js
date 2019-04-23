@@ -182,7 +182,9 @@ allNotes.prototype.updateNote = {
  *                                        DELETE NOTES
  * ***************************************************************************************************/
 
-// mutation for a deleting notes 
+/*
+     mutation for deleting notes 
+*/
 
 allNotes.prototype.removeNote = {
     type: auth,

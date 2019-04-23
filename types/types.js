@@ -3,30 +3,59 @@ const graphql = require('graphql');
 const { GraphQLObjectType,    //declaring the graphQL typed 
     GraphQLString,
     GraphQLNonNull,
-    GraphQLBoolean
+    GraphQLBoolean,
+    GraphQLID,
+    GraphQLList
 } = graphql;
 
-exports.userType = new GraphQLObjectType({       //defining the schema or type 
+const labelModel = require('../model/labelModel')
+const noteModel = require('../model/noteModel')
+
+const userType = new GraphQLObjectType({       //defining the schema or type 
     name: 'user',
-    fields: () => ({
-        //return {
-        firstName: {
-            type: new GraphQLNonNull(GraphQLString)
+    fields:  function(){
+        return {
+        id: {
+            type: new GraphQLNonNull(GraphQLID)
         },
-        lastName: {
+        firstName: {
             type: new GraphQLNonNull(GraphQLString)
         },
         email: {
             type: new GraphQLNonNull(GraphQLString)
         },
-        password: {
-            type: new GraphQLNonNull(GraphQLString)
-        }
-        //}
-    })
-});
+        labels :{
+            type: new GraphQLList(labelType),
 
-exports.auth = new GraphQLObjectType({          //defining the schema or type 
+           async resolve(parent,args) { 
+                console.log(parent);
+                var labels= await labelModel.find({"userID":parent.id})
+                return labels
+
+            }
+        },
+        notes : {
+            type :new GraphQLList(noteType),
+
+            async resolve(parent,args) { 
+                console.log(parent);
+                var notes= await noteModel.find({"userID":parent.id})
+                return notes
+
+            }
+
+        }
+        // password: {
+        //     type: new GraphQLNonNull(GraphQLString)
+        // }
+        //}
+//     })
+// });
+    }
+}
+})
+
+const auth = new GraphQLObjectType({          //defining the schema or type 
     name: 'auth',
     fields: () => ({
         success: {
@@ -41,16 +70,54 @@ exports.auth = new GraphQLObjectType({          //defining the schema or type
             type: GraphQLString
         }
 
+       
+
+
+
     })
 });
-
-exports.labelType = new GraphQLObjectType({       //defining the schema or type 
+const labelType = new GraphQLObjectType({       //defining the schema or type 
     name: 'labels',
     fields: () => ({
 
         labelName: {
             type: new GraphQLNonNull(GraphQLString)
-        }
+        },
+
+       
 
     })
 });
+
+
+const noteType = new GraphQLObjectType({
+    name: 'noteUser',
+    fields: () => {
+        return {
+            _id: {
+                type: GraphQLString
+            },
+            title: {
+                type: GraphQLString
+            },
+            description: {
+                type: GraphQLString
+            },
+            labelID: {
+                type: GraphQLString
+            },
+            userID: {
+                type: GraphQLString
+            },
+
+        }
+    }
+});
+
+module.exports = {
+    noteType,
+    labelType,
+    auth,
+    userType
+
+}

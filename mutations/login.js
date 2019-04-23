@@ -53,7 +53,7 @@ exports.login = {
         user = await userModel.find({ 'email': args.email })  // checking if the email already exists in the database 
         if (user.length > 0) {
             //console.log(user[0].verification);           //email id verification(can not login unless the email is verified)
-            if (user[0].verification === false) {
+            if (user[0].verification === false ) {
                 return {
                     "message": "Email not verified"
                 }

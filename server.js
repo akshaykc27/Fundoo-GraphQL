@@ -21,7 +21,11 @@ const userSchema = require('./index').userSchema
 app.use('/graphql', bodyParser.json(), graphqlHTTP ( request => ({
     schema: userSchema,
     graphiql : true,
-    context: request.query,
+    context:{token:request.query.token,
+        code:request.query.code,
+        access_token:request.query.access_token
+    }
+    
 })));
 
 //to check redis cache connection

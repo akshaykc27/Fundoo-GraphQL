@@ -16,6 +16,9 @@ var updateNote = require('./notes/notes').updateNote
 var removeNote = require('./notes/notes').removeNote
 var addLabelNote = require('./notes/notes').addLabelNote
 var removeLabelNote=require('./notes/notes').removeLabelNote
+var oAuth = require('./oauth/oAuth').oAuth
+var verify = require('./oauth/verify').verifyToken
+
 
 const graphql = require('graphql');
 const { GraphQLObjectType,    //declaring the graphQL types
@@ -37,7 +40,10 @@ module.exports =
             updateNote,
             removeNote,
             addLabelNote,
-            removeLabelNote
+            removeLabelNote,
+            oAuth,
+            verify
+           
             
         }
     })
