@@ -8,8 +8,8 @@ var noteSchema = new schema({  // defining the mongodb schema
     }],
     
     userID: {
-        type: 'string',
-        required : true
+        type: schema.Types.ObjectId,
+        ref : 'userSchema'
         
     },
     

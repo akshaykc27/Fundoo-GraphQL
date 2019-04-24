@@ -1,7 +1,4 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config();
-
-
 /*
 function to send the email  
 */

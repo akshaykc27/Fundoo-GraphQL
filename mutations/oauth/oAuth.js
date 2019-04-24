@@ -5,12 +5,11 @@ const clientID = process.env.clientID
 const clientSecret = process.env.clientSecret
 const userModel = require('../../model/userModel')
 const jwt = require('jsonwebtoken')
-var send = require('../oauth/verify')
+var util = require('../../util')
 
 exports.oAuth = {
 
     type: auth,
-
     resolve(parent, args, context) {
         // Import the axios library, to make HTTP requests 
         axios({
@@ -34,59 +33,41 @@ exports.oAuth = {
 
         function getToken(accessToken) {
             axios({
-                // make a POST request
+                // make a GET request
                 method: 'get',
-                // to the Github authentication API, with the client ID, client secret
-                // and request token
+                // to get the code
                 url: `https://api.github.com/user?access_token=${accessToken}`,
                 // Set the content type header, so that we get the response in JSOn
                 headers: {
                     accept: 'application/json'
                 }
             }).then(async (response) => {
-                // Once we get the response, extract the access token from
-                // the response body
-
-                // redirect the user to the welcome page, along with the access token
                 console.log(response.data)
-                var token = jwt.sign({gitUsername: response.data.login, gitID: response.data.id},'gitsecret')
-                //    console.log("token",token);
-                
+
+                //saving the git user details in the database 
                 gitUser = new userModel({
-                    gitUsername: response.data.login, gitID: response.data.id 
+                    gitUsername: response.data.login,
+                    gitID: response.data.id,
+                    firstName: "guest",
+                    lastName: "",
+                    email: "",
+                    gitToken: accessToken
                 })
-
                 let user = await gitUser.save();
-                if (!user) {
-                    return {
-                        "message": "error while saving the user"
-                    }
-                }
-                return {"message":"succesfully"}
-                // else {
-
-                  
-                //     if(!a)
-                //     {
-                        
-                //     }             
-                //     return {
-                        
-                //         "message": "saved the user successfully"
-                //     }
-                // }
-
-                
-
-
-
-
+                //generating token by taking the userID,gitID and git username in the payload 
+                var token = jwt.sign({ userID: user[0].id, gitUsername: response.data.login, gitID: response.data.id }, 'gitsecret')
+                url = `http://localhost:3000/graphql?token=${token}`
+                util.sendEmailFunction(url, response.data.email)
             })
 
         }
-
+        return { "message": "git authentication succesful" }
     }
 
 
 
 }
+
+
+
+
