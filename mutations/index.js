@@ -18,6 +18,7 @@ var addLabelNote = require('./notes/notes').addLabelNote
 var removeLabelNote=require('./notes/notes').removeLabelNote
 var oAuth = require('./oauth/oAuth').oAuth
 var verify = require('./oauth/verify').verifyToken
+var imageUpload = require('./imageUpload').imageUpload
 
 
 const graphql = require('graphql');
@@ -42,7 +43,8 @@ module.exports =
             addLabelNote,
             removeLabelNote,
             oAuth,
-            verify
+            verify,
+            imageUpload
            
             
         }

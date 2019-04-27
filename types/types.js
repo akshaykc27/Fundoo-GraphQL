@@ -45,12 +45,6 @@ const userType = new GraphQLObjectType({       //defining the schema or type
                 }
 
             }
-            // password: {
-            //     type: new GraphQLNonNull(GraphQLString)
-            // }
-            //}
-            //     })
-            // });
         }
     }
 })
@@ -117,10 +111,14 @@ const noteType = new GraphQLObjectType({
 
 
 
+
+
+
 module.exports = {
     noteType,
     labelType,
     auth,
-    userType
+    userType,
+    
 
 }

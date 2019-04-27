@@ -18,7 +18,7 @@ exports.oAuth = {
             // to the Github authentication API, with the client ID, client secret
             // and request token
             url: `https://github.com/login/oauth/access_token?client_id=${clientID}&client_secret=${clientSecret}&code=${context.code}`,
-            // Set the content type header, so that we get the response in JSOn
+            // Set the content type header, so that we get the response in JSON
             headers: {
                 accept: 'application/json'
             }
@@ -61,7 +61,7 @@ exports.oAuth = {
             })
 
         }
-        return { "message": "git authentication succesful" }
+        return { "message": "git authentication successful" }
     }
 
 

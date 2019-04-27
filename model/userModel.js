@@ -32,13 +32,16 @@ var userSchema = new schema({  // defining the mongodb schema
     },
     gitID : {
         type:String,
-        default:""
+        default:""  
     },
     gitUsername : {
         type : String,
         default:""
     },
     gitToken : {
+        type : String
+    },
+    imageUrl : {
         type : String
     }
 },

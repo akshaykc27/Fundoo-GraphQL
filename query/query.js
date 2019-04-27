@@ -1,7 +1,9 @@
 const graphql = require('graphql');
 const { GraphQLObjectType,    //declaring the graphQL types
     GraphQLList,
-    GraphQLString } = graphql;
+    GraphQLString, } = graphql;
+
+
 
 const userType = require('../types/types').userType;
 const labelType = require('../types/types').labelType;
@@ -26,7 +28,7 @@ exports.userQueryType = new GraphQLObjectType({
                     }
                 },
                 resolve: async function(parent,args) {
-                    var check =  (await userModel.find().exec() || await userModel.find({ "_id": args.userID }).exec()  )
+                    var check =  ( await userModel.find({ "_id": args.userID }).exec() || await userModel.find().exec())
                     // const users1 = await userModel.find({ "_id": args.userID }).exec()
                     
                     // const users = await userModel.find().exec()   //  returns all the users from the database
@@ -49,6 +51,8 @@ exports.userQueryType = new GraphQLObjectType({
                     return check;
                 }
             },
+
+          
 
             
 
