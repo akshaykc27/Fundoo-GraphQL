@@ -10,7 +10,6 @@ const jwt = require('jsonwebtoken');
 
 exports.verifyEmail = {
     type: auth,
-
     /**
      * 
      * @param {*} parent 
@@ -18,7 +17,6 @@ exports.verifyEmail = {
      * @param {*} context 
      */
     async resolve(parent, args, context) {
-
         try {
             var payload = await jwt.verify(context.token, "APP_SECRET"); //token verification
             if (!payload) {
@@ -36,7 +34,6 @@ exports.verifyEmail = {
                 return {
                     "message": "verification unsuccessful"
                 }
-
             }
         }
         catch (err) {
@@ -44,7 +41,6 @@ exports.verifyEmail = {
             return {
                 "message": err
             }
-
         }
     }
 }

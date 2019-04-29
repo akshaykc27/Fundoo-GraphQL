@@ -32,7 +32,6 @@ exports.forgotPassword = {
      * @param {*} args 
      */
     async resolve(parent, args) {
-
         try {
             user = await userModel.find({ 'email': args.email });  //checking if the email already exists in the database 
             console.log(user)
@@ -54,7 +53,6 @@ exports.forgotPassword = {
             return {
                 "message": err
             }
-
         }
     }
 }

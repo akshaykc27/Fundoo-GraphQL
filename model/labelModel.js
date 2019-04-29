@@ -1,13 +1,10 @@
 const mongoose = require('mongoose');
 var schema = mongoose.Schema;
 var labelSchema = new schema({  // defining the mongodb schema
-
     labelName: {
-        type: 'string',
+        type: String,
         required: true
     },
-
-
     userID: {
         type: schema.Types.ObjectId,
         ref : 'userSchema'

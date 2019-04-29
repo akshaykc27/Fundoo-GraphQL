@@ -1,6 +1,6 @@
 /* 
     requiring the necessary files
-*/   
+*/
 
 const graphql = require('graphql');
 const auth = require('../../types/types').auth
@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken');
     declaring the graphQL types
 */
 
-const { GraphQLString,  
+const { GraphQLString,
     GraphQLNonNull } = graphql;
 
 /* 
@@ -26,7 +26,6 @@ exports.createLabel = {
         }
 
     },
-
     /**
      * 
      * @param {*} parent 
@@ -58,9 +57,6 @@ exports.createLabel = {
                     "message": "error while saving label"
                 }
             }
-
-
-
         }
         catch (err) {
             console.log("ERROR: " + err);

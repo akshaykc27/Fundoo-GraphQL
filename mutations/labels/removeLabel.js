@@ -28,14 +28,12 @@ exports.removeLabel = {
             type: new GraphQLNonNull(GraphQLString)
         }
     },
-
     /**
      * 
      * @param {*} parent 
      * @param {*} args 
      * @param {*} context 
      */
-
     async resolve(parent, args, context) {
 
         try {
@@ -53,7 +51,6 @@ exports.removeLabel = {
                 }
             }
         }
-
         catch (err) {
             console.log("ERROR: " + err);
             return {
@@ -61,8 +58,6 @@ exports.removeLabel = {
             }
 
         }
-
-
     }
 }
 

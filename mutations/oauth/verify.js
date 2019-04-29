@@ -12,7 +12,6 @@ const jwt = require('jsonwebtoken');
 
 exports.verifyToken = ({
     type: auth,
-
     /**
      * 
      * @param {*} parent 
@@ -29,7 +28,6 @@ exports.verifyToken = ({
         }
         console.log(payload.gitUsername)
         console.log(payload.gitID)
-
         //updating the gitVerify field so that the user can login
         userUpdate = await userModel.updateOne({ "gitID": payload.gitID }, { $set: { "gitVerify": true } })  // finding the user for the email provided and updating the verification field in the database  
         if (userUpdate) {
@@ -52,7 +50,6 @@ exports.verifyToken = ({
             return {
                 "message": " user not found !!! "
             }
-
         }
     }
 })

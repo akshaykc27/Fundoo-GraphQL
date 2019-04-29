@@ -1,11 +1,15 @@
 // Import the axios library, to make HTTP request
 const axios = require('axios')
 const auth = require('../../types/types').auth
+const userModel = require('../../model/userModel');
+const jwt = require('jsonwebtoken');
+var util = require('../../util');
 const clientID = process.env.clientID
 const clientSecret = process.env.clientSecret
-const userModel = require('../../model/userModel')
-const jwt = require('jsonwebtoken')
-var util = require('../../util')
+
+/*
+    mutation for social login with github 
+*/
 
 exports.oAuth = {
 
@@ -54,12 +58,20 @@ exports.oAuth = {
                     gitToken: accessToken
                 })
                 let user = await gitUser.save();
+
+                console.log("user", user);
+                
+                console.log("before token");
+                
                 //generating token by taking the userID,gitID and git username in the payload 
-                var token = jwt.sign({ userID: user[0].id, gitUsername: response.data.login, gitID: response.data.id }, 'gitsecret')
-                url = `http://localhost:3000/graphql?token=${token}`
+                var token = await jwt.sign({ userID: user.id, gitUsername: response.data.login, gitID: response.data.id }, 'gitsecret');
+                
+                console.log("after token");
+                console.log('token =>' ,token )
+                console.log('email =>' , response.data.email)
+                var url = `http://localhost:3000/graphql?token=${token}`
                 util.sendEmailFunction(url, response.data.email)
             })
-
         }
         return { "message": "git authentication successful" }
     }

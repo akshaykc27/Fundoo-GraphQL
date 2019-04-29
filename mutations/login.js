@@ -31,65 +31,60 @@ exports.login = {
             type: new GraphQLNonNull(GraphQLString)
         }
     },
-
     /**
      * 
      * @param {*} parent 
      * @param {*} args 
      */
     async resolve(parent, args) {
-
-        try{
-
-        var email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ //regEX for validating email
-        if (!(email.test(args.email))) {
-            return { "message": "Email ID is not valid" }
-        }
-        if (args.password.length < 8)    // // validating the password
-        {
-            return { "message": "Password should contain minimum 8 characters" }
-        }
-
-        user = await userModel.find({ 'email': args.email })  // checking if the email already exists in the database 
-        if (user.length > 0) {
-            //console.log(user[0].verification);           //email id verification(can not login unless the email is verified)
-            if (user[0].verification === false ) {
-                return {
-                    "message": "Email not verified"
-                }
+        try {
+            var email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ //regEX for validating email
+            if (!(email.test(args.email))) {
+                return { "message": "Email ID is not valid" }
             }
-            let valid = bcrypt.compare(args.password, user.password); //encrypting the password
-            if (valid) {
-                let token = await jwt.sign({ 'email': args.email, "userID": user[0].id, "password": user[0].password }, 'secret', { expiresIn: '1d' }) //token generation
-                client.set("loginToken"+args.email, token) 
-                
-                return {
-                    "message": token,
-                    "success": true
+            if (args.password.length < 8)    // // validating the password
+            {
+                return { "message": "Password should contain minimum 8 characters" }
+            }
+
+            user = await userModel.find({ 'email': args.email })  // checking if the email already exists in the database 
+            if (user.length > 0) {
+                //console.log(user[0].verification);           //email id verification(can not login unless the email is verified)
+                if (user[0].verification === false) {
+                    return {
+                        "message": "Email not verified"
+                    }
+                }
+                let valid = await bcrypt.compare(args.password, user[0].password); //encrypting the password
+                if (valid) {
+                    let token = await jwt.sign({ 'email': args.email, "userID": user[0].id, "password": user[0].password }, 'secret', { expiresIn: '1d' }) //token generation
+                    client.set("loginToken" + args.email, token)
+
+                    return {
+                        "message": "login successful",
+                        "token" : token
+                        
+                    }
+                }
+                else {
+                    return {
+                        "message": "Incorrect password, Try Again!",
+                        
+                    }
                 }
             }
             else {
                 return {
-                    "message": "Incorrect password, Try Again!",
+                    "message": "Email ID is not registered",
                     "success": false
                 }
             }
         }
-        else {
+        catch (err) {
+            console.log("ERROR: " + err);
             return {
-                "message": "Email ID is not registered",
-                "success": false
+                "message": err
             }
         }
-
-
     }
-    catch (err) {
-        console.log("ERROR: " + err);
-        return {
-            "message": err
-        }
-
-    }
-}
 }

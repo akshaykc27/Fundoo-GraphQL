@@ -3,13 +3,9 @@
 const graphql = require('graphql');
 const { GraphQLString,  //declaring the graphQL types
     GraphQLNonNull } = graphql;
-
 const auth = require('../../types/types').auth
 const labelModel = require('../../model/labelModel');
 const jwt = require('jsonwebtoken');
-
-
-
 
 // mutation for  a user
 exports.updateLabel = {
@@ -25,7 +21,6 @@ exports.updateLabel = {
 
     },
     async resolve(parent, args, context) {
-        
         try {
             var payload = await jwt.verify(context.token, "secret");
             console.log(payload.userID)
@@ -41,9 +36,7 @@ exports.updateLabel = {
                     "message": "error while updating the label name"
                 }
             }
-
         }
-
         catch (err) {
             console.log("ERROR: " + err);
             return {
@@ -51,8 +44,6 @@ exports.updateLabel = {
             }
 
         }
-
-
     }
 }
 

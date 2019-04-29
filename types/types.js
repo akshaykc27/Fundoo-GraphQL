@@ -21,27 +21,51 @@ const userType = new GraphQLObjectType({       //defining the schema or type
             firstName: {
                 type: new GraphQLNonNull(GraphQLString)
             },
+            lastName : {
+                type: new GraphQLNonNull(GraphQLString)
+            },
             email: {
                 type: new GraphQLNonNull(GraphQLString)
             },
-            labels: {
+            labels: {                                           //to fetch and list all the labels linked to a particular user
                 type: new GraphQLList(labelType),
 
                 async resolve(parent, args) {
-                    console.log(parent);
-                    var labels = await labelModel.find({ "userID": parent.id })
-                    return labels
+                    try {
+                        console.log(parent);
+                        var labels = await labelModel.find({ "userID": parent.id });
+                        if (!labels) {
+                            return {
+                                "message": "no labels found "
+                            }
+                        }
+                        return labels;
+                    }
+                    catch (err) {
+                        console.log("ERROR : ", err);
+
+                    }
 
                 }
             },
-            notes: {
+            notes: {                                  //to fetch and list all the notes linked to a particular user
                 type: new GraphQLList(noteType),
 
                 async resolve(parent, args) {
-                    console.log(parent);
-                    var notes = await noteModel.find({ "userID": parent.id })
-                    return notes
+                    try {
+                        console.log(parent);
+                        var notes = await noteModel.find({ "userID": parent.id });
+                        if (!notes) {
+                            return {
+                                "message": "no notes found"
+                            }
+                        }
+                        return notes;
+                    }
+                    catch (err) {
+                        console.log("ERROR : ", err);
 
+                    }
                 }
 
             }
@@ -63,26 +87,16 @@ const auth = new GraphQLObjectType({          //defining the schema or type
         token: {
             type: GraphQLString
         }
-
-
-
-
-
     })
 });
 const labelType = new GraphQLObjectType({       //defining the schema or type 
     name: 'labels',
     fields: () => ({
-
         labelName: {
             type: new GraphQLNonNull(GraphQLString)
-        },
-
-
-
+        }
     })
 });
-
 
 const noteType = new GraphQLObjectType({
     name: 'noteUser',
@@ -102,23 +116,14 @@ const noteType = new GraphQLObjectType({
             },
             userID: {
                 type: GraphQLString
-            },
-
+            }
         }
     }
 });
-
-
-
-
-
-
 
 module.exports = {
     noteType,
     labelType,
     auth,
-    userType,
-    
-
+    userType
 }

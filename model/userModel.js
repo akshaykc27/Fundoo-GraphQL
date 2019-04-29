@@ -3,50 +3,41 @@ var schema = mongoose.Schema;
 var userSchema = new schema({  // defining the mongodb schema
 
     firstName: {
-        type: 'string',
-        //required: true
+        type: String
     },
-
     lastName: {
-        type: 'string',
-        //required: true
+        type: String
     },
-
     email: {
-        type: 'string',
-        //required: true
+        type: String
     },
-
     password: {
-        type: 'string',
-        //required: true
+        type: String
     },
-
-    verification : {
-        //type : 'boolean',
-        
+    verification: {
+        type: String
     },
-    gitVerify : {
-        type:'boolean',
-        default:false
+    gitVerify: {
+        type: Boolean,
+        default: false
     },
-    gitID : {
-        type:String,
-        default:""  
+    gitID: {
+        type: String,
+        default: ""
     },
-    gitUsername : {
-        type : String,
-        default:""
+    gitUsername: {
+        type: String,
+        default: ""
     },
-    gitToken : {
-        type : String
+    gitToken: {
+        type: String
     },
-    imageUrl : {
-        type : String
+    imageUrl: {
+        type: String
     }
 },
     {
-        timestamps:true
+        timestamps: true
     });
 
 module.exports = mongoose.model('user', userSchema); // exporting the model

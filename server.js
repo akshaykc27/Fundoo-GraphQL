@@ -37,6 +37,7 @@ mongoose.connection.on("error", () => {
     console.log('error while connecting to the database ');
     process.exit(1);
 })
+
 // listening to port
 app.listen(process.env.port, () => {
     console.log("listening to port " + process.env.port);
@@ -49,9 +50,8 @@ var upload = multer();
 var multerS3 = require('multer-s3')
 var s3 = new aws.S3({
     region: 'ap-south-1',
-    accessKeyId: 'AKIAYR77OBXZLLLTI5ZH',
-    secretAccessKey: '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',
-    s3Url: 'https://my-s3-url.com/.jpg', /* optional */
+    accessKeyId: process.env.accessKeyId,
+    secretAccessKey: process.env.secretAccessKey
 })
 var upload = multer({
     storage: multerS3({
@@ -61,7 +61,7 @@ var upload = multer({
             callback(null, { fieldName: file.fieldname });
         },
         key: function (req, file, callback) {
-            callback(null, Date.now().toString())
+            callback(null, Date.now().toString()) 
         }
     })
 })

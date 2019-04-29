@@ -20,7 +20,6 @@ var oAuth = require('./oauth/oAuth').oAuth
 var verify = require('./oauth/verify').verifyToken
 var imageUpload = require('./imageUpload').imageUpload
 
-
 const graphql = require('graphql');
 const { GraphQLObjectType,    //declaring the graphQL types
 } = graphql;
@@ -45,8 +44,6 @@ module.exports =
             oAuth,
             verify,
             imageUpload
-           
-            
         }
     })
 

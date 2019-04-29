@@ -9,9 +9,7 @@
 const graphql = require('graphql');
 const auth = require('../../types/types').auth
 const noteModel = require('../../model/noteModel');
-const labelModel = require('../../model/labelModel');
 const jwt = require('jsonwebtoken');
-
 
 /* 
     declaring the graphQL types
@@ -20,13 +18,11 @@ const jwt = require('jsonwebtoken');
 const { GraphQLString,
     GraphQLNonNull } = graphql;
 
-
 /* 
     mutation for a creating notes
 */
 
 function allNotes() {
-
 }
 
 allNotes.prototype.createNote = {
@@ -35,17 +31,13 @@ allNotes.prototype.createNote = {
         labelID: {
             type: new GraphQLNonNull(GraphQLString)
         },
-
         title: {
             type: new GraphQLNonNull(GraphQLString)
         },
-
         description: {
             type: new GraphQLNonNull(GraphQLString)
         }
-
     },
-
     /**
      * 
      * @param {*} parent 
@@ -68,19 +60,8 @@ allNotes.prototype.createNote = {
 
             var payload = await jwt.verify(context.token, "secret");
             console.log(payload.userID)
-
-            // var checklabelID = await labelModel.find({"_id":args.labelID})
-            // console.log(args.labelID);
-            // console.log(checklabelID);
-            // if(!checklabelID )
-            // {
-            //     return {
-            //         "message" : "not a valid id"
-            //     }
-            // }
-
             note = await noteModel.find({ "title": args.title });
-            if (note.length >0) {
+            if (note.length > 0) {
                 return {
                     "message": "title already exists"
                 }
@@ -103,19 +84,13 @@ allNotes.prototype.createNote = {
                     "message": "error while saving note"
                 }
             }
-
-
-
-        }
-        catch (err) {
+        } catch (err) {
             console.log("ERROR: " + err);
             return {
                 "message": err
             }
-
         }
     }
-
 }
 
 /*****************************************************************************************************
@@ -130,24 +105,19 @@ allNotes.prototype.updateNote = {
         noteID: {
             type: new GraphQLNonNull(GraphQLString)
         },
-
         newTitle: {
             type: new GraphQLNonNull(GraphQLString)
         },
-
         newDescription: {
             type: new GraphQLNonNull(GraphQLString)
         }
-
     },
     async resolve(parent, args, context) {
-
         try {
-            var valid = await noteModel.find({"title": args.newTitle})
-            if(valid)
-            {
+            var valid = await noteModel.find({ "title": args.newTitle })
+            if (valid) {
                 return {
-                    "message" : "title already exists"
+                    "message": "title already exists"
                 }
             }
             var payload = await jwt.verify(context.token, "secret");
@@ -165,16 +135,12 @@ allNotes.prototype.updateNote = {
             }
 
         }
-
         catch (err) {
             console.log("ERROR: " + err);
             return {
                 "message": err
             }
-
         }
-
-
     }
 }
 
@@ -196,16 +162,13 @@ allNotes.prototype.removeNote = {
             type: new GraphQLNonNull(GraphQLString)
         }
     },
-
     /**
      * 
      * @param {*} parent 
      * @param {*} args 
      * @param {*} context 
      */
-
     async resolve(parent, args) {
-
         try {
             // console.log(payload.userID)
             note = await noteModel.findByIdAndRemove({ "_id": args.noteID, "title": args.title });
@@ -220,16 +183,12 @@ allNotes.prototype.removeNote = {
                 }
             }
         }
-
         catch (err) {
             console.log("ERROR: " + err);
             return {
                 "message": err
             }
-
         }
-
-
     }
 }
 
@@ -244,24 +203,20 @@ allNotes.prototype.addLabelNote = {
         noteID: {
             type: new GraphQLNonNull(GraphQLString)
         },
-
         labelID: {
             type: new GraphQLNonNull(GraphQLString)
         },
-
     },
     async resolve(parent, args, context) {
-
         try {
-            var valid = await noteModel.find({"labelID": args.labelID})
-            if(valid.length > 0)
-            {
+            var valid = await noteModel.find({ "labelID": args.labelID })
+            if (valid.length > 0) {
                 return {
-                    "message" : "id already exists"
+                    "message": "id already exists"
                 }
             }
             var note = await noteModel.findOneAndUpdate({ "_id": args.noteID },
-                { $push : {"labelID": args.labelID } })
+                { $push: { "labelID": args.labelID } })
             if (note) {
                 return {
                     "message": "note updated successfully"
@@ -274,16 +229,12 @@ allNotes.prototype.addLabelNote = {
             }
 
         }
-
         catch (err) {
             console.log("ERROR: " + err);
             return {
                 "message": err
             }
-
         }
-
-
     }
 }
 
@@ -294,27 +245,23 @@ allNotes.prototype.addLabelNote = {
 allNotes.prototype.removeLabelNote = {
     type: auth,
     args: {
-        noteID: { 
+        noteID: {
             type: new GraphQLNonNull(GraphQLString)
         },
-
         labelID: {
             type: new GraphQLNonNull(GraphQLString)
         },
-
     },
     async resolve(parent, args, context) {
-
         try {
-            var valid = await noteModel.find({"labelID": args.labelID})
-            if(!valid.length > 0)
-            {
+            var valid = await noteModel.find({ "labelID": args.labelID })
+            if (!valid.length > 0) {
                 return {
-                    "message" : "id does not exist"
+                    "message": "id does not exist"
                 }
             }
             var note = await noteModel.findOneAndUpdate({ "_id": args.noteID },
-                { $pull : {"labelID": args.labelID } })
+                { $pull: { "labelID": args.labelID } })
             if (note) {
                 return {
                     "message": " label successfully removed  "
@@ -325,19 +272,13 @@ allNotes.prototype.removeLabelNote = {
                     "message": "error while removing the label"
                 }
             }
-
         }
-
         catch (err) {
             console.log("ERROR: " + err);
             return {
                 "message": err
             }
-
         }
-
-
     }
 }
-
-module.exports= new allNotes;
+module.exports = new allNotes;

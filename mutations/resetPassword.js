@@ -13,13 +13,9 @@ const bcrypt = require('bcryptjs')
 */
 const { GraphQLString,
     GraphQLNonNull } = graphql;
-
-
-
 /* 
     mutation for reset password
 */
-
 exports.resetPassword = {
     type: auth,
     args: {
@@ -39,7 +35,6 @@ exports.resetPassword = {
      */
 
     async resolve(parent, args, context) {
-
         try {
             if (args.password != args.confirmPassword) {  // checking whether both the passwords entered match
                 return {
@@ -60,7 +55,6 @@ exports.resetPassword = {
                         "message": "password reset unsuccessful"
                     }
                 }
-
             }
         }
         catch (err) {
@@ -68,8 +62,6 @@ exports.resetPassword = {
             return {
                 "message": err
             }
-
         }
-
     }
 }

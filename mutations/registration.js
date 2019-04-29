@@ -18,7 +18,6 @@ var client = redis.createClient()
 const { GraphQLString,
     GraphQLNonNull } = graphql;
 
-
 /*
      mutation for registering a user
 */
@@ -38,20 +37,14 @@ exports.registration = {
         password: {
             type: new GraphQLNonNull(GraphQLString)
         }
-
     },
-
     /**
      * 
      * @param {*} parent 
      * @param {*} args 
      */
-
     async resolve(parent, args) {
-
         try {
-
-
             var email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ //regEX for validating email
             if (!(email.test(args.email))) {
                 return { "message": "Email ID is not valid" }
@@ -59,13 +52,10 @@ exports.registration = {
             if (args.password.length < 8) {  // validating the password
                 return { "message": "password should be min 8 characters" }
             }
-
             let encryptedPassword = bcrypt.hashSync(args.password, 10); // encrypting the password
-
             user = await userModel.find({ 'email': args.email })  //checking the database for existing user with the same email 
             //console.log(user);
             if (!user.length > 0) {
-
                 let user = new userModel({    // creating an object and saving the details of the user in the database
                     firstName: args.firstName,
                     lastName: args.lastName,
@@ -73,14 +63,13 @@ exports.registration = {
                     password: encryptedPassword,
                     verification: false
                 });
-
                 user.save();
                 /*
                 generating the token and sending it to the email provided to check the authenticity of the user
                 */
                 var token = await jwt.sign({ "email": args.email }, "APP_SECRET");
-                client.set("registerToken"+args.id, token); // saving the token in redis cache
-                client.get("registerToken"+args.id, function (error, result) {
+                client.set("registerToken" + args.id, token); // saving the token in redis cache
+                client.get("registerToken" + args.id, function (error, result) {
                     if (error) {
                         console.log(error);
 
@@ -89,7 +78,6 @@ exports.registration = {
                 });
                 var url = "http://localhost:3000/graphql?token=" + token;
                 sendMail(url, args.email);
-
                 return {
                     "success": true,
                     "message": "registration successful",
@@ -102,15 +90,12 @@ exports.registration = {
                     "message": "registration unsuccessful , email already exists"
                 }
             }
-
-
         }
         catch (err) {
             console.log("ERROR: " + err);
             return {
                 "message": err
             }
-
         }
     }
 }

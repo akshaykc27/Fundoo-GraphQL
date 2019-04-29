@@ -1,3 +1,7 @@
 PORT=
 USERNAME=
 PASSWORD=
+clientID=
+clientSecret=
+accessKeyId=
+secretAccessKey=
